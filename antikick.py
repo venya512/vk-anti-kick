@@ -1,14 +1,21 @@
 import requests
 import json
 from threading import Thread
+import sys
 
+print('reading "config.txt"')
 i = 0
 couple  = [{}, {}]
 file = open('config.txt', 'r')
-for line in file:
-    couple[i]['id'] = int(line[:9])
-    couple[i]['token'] = str(line[10:95])
-    i+=1
+try:
+    for line in file:
+        couple[i]['id'] = int(line[:9])
+        couple[i]['token'] = str(line[10:95])
+        i+=1
+except:
+    print('Invalid id/token\nEdit "config.txt"')
+    input('Press [Enter] to exit')
+    sys.exit()
 
 def antikick(token, tm_id):
     # get information about the server

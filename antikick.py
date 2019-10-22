@@ -9,11 +9,16 @@ couple  = [{}, {}]
 file = open('config.txt', 'r')
 try:
     for line in file:
-        couple[i]['id'] = int(line[:9])
-        couple[i]['token'] = str(line[10:95])
+        acc = line.split()
+        print(acc)
+        couple[i]['id'] = acc[0]
+        couple[i]['token'] = acc[1]
         i+=1
-except:
+    couple[0]['token'], couple[1]['token'] = couple[1]['token'], couple[0]['token']
+
+except Exception as e:
     print('Invalid id/token\nEdit "config.txt"')
+    print(e)
     input('Press [Enter] to exit')
     sys.exit()
 
@@ -24,9 +29,14 @@ def antikick(token, tm_id):
                             params = 'need_pts=0&ip_version=3',
                             token = token)
                             ).json()
-    ts = response['response']['ts']
-    key = response['response']['key']
-    server = response['response']['server']
+    try:
+        ts = response['response']['ts']
+        key = response['response']['key']
+        server = response['response']['server']
+    except Exception as e:
+        print('Some error ocurred:')
+        print(e)
+        print('\n', response)
     print('\nreceived longpool server:\n{server}'.format(server = server))
     while True:
         # connecting to longpool server
@@ -40,10 +50,10 @@ def antikick(token, tm_id):
         # receive events
         for event in response['updates']:
             if event[0] == 52 and event[1] == 8:
-                id = event[3]
+                id = str(event[3])
                 chat_id = event[2] - 2000000000
-                #print('User id%s has ben kicked from chat %s' % (id, chat_id))
-                if id  == tm_id:
+                print('User id%s has ben kicked from chat %s' % (id, chat_id))
+                if id == tm_id:
                     response = requests.get('https://api.vk.com/method/{method}?{params}&access_token={token}&v=5.95'.format(
                                             method = 'messages.addChatUser',
                                             params = 'chat_id={}&user_id={}'.format(chat_id, tm_id),

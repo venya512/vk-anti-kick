@@ -33,6 +33,10 @@ def antikick(token, tm_id):
         ts = response['response']['ts']
         key = response['response']['key']
         server = response['response']['server']
+    except KeyError as e:
+        print('Ошибка в ответе сервера - не хватает данных (ключа)')
+        print(e)
+        print('\n', response)
     except Exception as e:
         print('Some error ocurred:')
         print(e)
@@ -59,6 +63,7 @@ def antikick(token, tm_id):
                                             params = 'chat_id={}&user_id={}'.format(chat_id, tm_id),
                                             token = token)
                                             ).json()
+                    #print(response)
                     if response['response'] == 1:
                         print('def %s' % tm_id)
 

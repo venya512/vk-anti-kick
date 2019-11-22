@@ -51,7 +51,7 @@ def antikick(token, def_id, user):
                 if event[0] == 52 and event[1] == 8:
                     id = str(event[3])
                     chat_id = event[2] - 2000000000
-                    #print('\033[92m [%s] %s кикнут из беседы %s \033[0m' % (owner_id, id, chat_id))
+                    print('\033[91m [%s] %s кикнут из беседы %s \033[0m' % (owner_id, id, chat_id))
                     if id in def_id_:
                         response = requests.get('https://api.vk.com/method/{method}?{params}&access_token={token}&v=5.95'.format(
                                                 method = 'messages.addChatUser',
